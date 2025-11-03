@@ -479,13 +479,15 @@ async def get_health_summary(current_user: dict = Depends(get_current_user)):
         # Get latest activity
         latest_activity = await db.activities.find_one(
             {"user_id": current_user["id"]},
-            sort=[("date", -1)]
+            sort=[("date", -1)],
+            projection={"_id": 0}  # Exclude MongoDB ObjectId
         )
         
         # Get latest chat
         latest_chat = await db.chats.find_one(
             {"user_id": current_user["id"]},
-            sort=[("created_at", -1)]
+            sort=[("created_at", -1)],
+            projection={"_id": 0}  # Exclude MongoDB ObjectId
         )
         
         last_chat_message = None
